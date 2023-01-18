@@ -22,12 +22,15 @@ public class Game {
             {15,25,30}, {40,30,50}, {50,50,50},{10,0,25}, {25,0,50},
             {30,10,60}, {30,30,30}};
     private Pokemon[] allPokemons;
-    //Time complexity is O(1)(no loops).
+     //Time complexity is O(n*k*m),while n=POKEMON_NAMES.length,
+    // k=POKEMON_EVOLUTIONS_NUMBER and m=EVOLUTIONS_ATTACKS_NUMBER.
+    //The first loop does not affect the complexity of the function because it
+    //is a very small number of operations comparing to the other loops.
     public Game(){
         buildPokemons();
     }
 
-    //Time complexity is O(1)(no loops).
+    //Time complexity is O(n).
     public  String toString() {
         String out = "";
         out = out + "All Pokemons number: " + allPokemons.length + "\n";
@@ -35,10 +38,7 @@ public class Game {
         out = out + allPokemons[i].toString();
         return out;
     }
-    //Time complexity is O(n*k*m),while n=POKEMON_NAMES.length,
-    // k=POKEMON_EVOLUTIONS_NUMBER and m=EVOLUTIONS_ATTACKS_NUMBER.
-    //The first loop does not affect the complexity of the function because it
-    //is a very small number of operations comparing to the other loops.
+    //Time complexity is O(1), because the loop is performed only 2 times.
     public Pokemon[] getTwoPlayers() {
         Pokemon[] playerPokemons = new Pokemon[2];
         Random random = new Random();
