@@ -22,11 +22,12 @@ public class Game {
             {15,25,30}, {40,30,50}, {50,50,50},{10,0,25}, {25,0,50},
             {30,10,60}, {30,30,30}};
     private Pokemon[] allPokemons;
-
+    //Time complexity is O(1)(no loops).
     public Game(){
         buildPokemons();
     }
 
+    //Time complexity is O(1)(no loops).
     public  String toString() {
         String out = "";
         out = out + "All Pokemons number: " + allPokemons.length + "\n";
@@ -34,7 +35,10 @@ public class Game {
         out = out + allPokemons[i].toString();
         return out;
     }
-
+    //Time complexity is O(n*k*m),while n=POKEMON_NAMES.length,
+    // k=POKEMON_EVOLUTIONS_NUMBER and m=EVOLUTIONS_ATTACKS_NUMBER.
+    //The first loop does not affect the complexity of the function because it
+    //is a very small number of operations comparing to the other loops.
     public Pokemon[] getTwoPlayers() {
         Pokemon[] playerPokemons = new Pokemon[2];
         Random random = new Random();
@@ -49,6 +53,10 @@ public class Game {
         }
         return playerPokemons;
     }
+    //Time complexity is O(n*k*m),while n=POKEMON_NAMES.length,
+    // k=POKEMON_EVOLUTIONS_NUMBER and m=EVOLUTIONS_ATTACKS_NUMBER.
+    //The first loop does not affect the complexity of the function because it
+    //is a very small number of operations comparing to the other loops.
     private void buildPokemons() {
         int electPokemonsNumber = 0;
 
@@ -68,8 +76,8 @@ public class Game {
             for (int j = 0; j < POKEMON_EVOLUTIONS_NUMBER[i]; j++, evolveIndex++) {
                 int modesNumber = EVOLUTIONS_ATTACKS_NUMBER[evolveIndex];
                 Attack[] attacks = new Attack[modesNumber];
-                for (int l = 0; l < modesNumber; l++, modesIndex++) {
-                    attacks[l] = new Attack(EVOLUTIONS_ATTACKS_NAMES[modesIndex], EVOLUTIONS_ATTACKS_PARAMETERS[modesIndex][0], EVOLUTIONS_ATTACKS_PARAMETERS[modesIndex][1],
+                for (int k = 0; k < modesNumber; k++, modesIndex++) {
+                    attacks[k] = new Attack(EVOLUTIONS_ATTACKS_NAMES[modesIndex], EVOLUTIONS_ATTACKS_PARAMETERS[modesIndex][0], EVOLUTIONS_ATTACKS_PARAMETERS[modesIndex][1],
                             EVOLUTIONS_ATTACKS_PARAMETERS[modesIndex][2]);
                 }
                 evolutions[j] = new Evolution(EVOLUTIONS_NAMES[evolveIndex], POKEMONS_EVOLUTIONS_PARAMETERS[evolveIndex][0],

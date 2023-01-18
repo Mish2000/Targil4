@@ -5,34 +5,44 @@ public class Evolution {
     private int attackPoints;
     private Attack[] attacks;
 
-    public Evolution (String name, int level, int hitPoints, int attackPoints, Attack[] attacks) {
+    //Time complexity is O(1)(no loops).
+    public Evolution(String name, int level, int hitPoints, int attackPoints, Attack[] attacks) {
         this.name = name;
         this.level = level;
         this.hitPoints = hitPoints;
         this.attackPoints = attackPoints;
         this.attacks = new Attack[attacks.length];
-        for (int i = 0; i <attacks.length; i++)
+        for (int i = 0; i < attacks.length; i++)
             this.attacks[i] = attacks[i];
     }
+
+    //Time complexity is O(1)(no loops).
     public String getName() {
         return name;
     }
+
+    //Time complexity is O(1)(no loops).
     public int getLevel() {
         return level;
     }
+    //Time complexity is O(1)(no loops).
 
     public int getHitPoints() {
 
         return hitPoints;
     }
+    //Time complexity is O(1)(no loops).
+
     public int getAttackPoints() {
 
         return attackPoints;
     }
+    //Time complexity is O(1)(no loops).
     public Attack[] getAttacks() {
 
         return attacks;
     }
+    //Time complexity is O(n).
     public String toString() {
         String out = "Evolution Name " + name + ", pokemon level " + level +
                 ", hit points max " + hitPoints + " ,attack points max " + attackPoints +

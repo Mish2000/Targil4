@@ -5,27 +5,30 @@ public class Battle {
 
     private final String[] PLAYER_NAME = {"First Player: ", "Second Player: "};
     private Pokemon[] players;
-    private static final int[] ACTIVE_INDEX = {0,1};
-    private static final int[] PASSIVE_INDEX = {1,0};
-    private static final String[] STANDBY_TITLES  = {" hit points added to ", " attack points added to .", "Tripled attack power next turn "};
-    private static final int[] STANDBY_HIT_POINTS_BOUNDS = {5,31};
-    private static final int[] STANDBY_ATTACK_POINTS_BOUNDS = {0,31};
+    private static final int[] ACTIVE_INDEX = {0, 1};
+    private static final int[] PASSIVE_INDEX = {1, 0};
+    private static final String[] STANDBY_TITLES = {" hit points added to ", " attack points added to .", "Tripled attack power next turn "};
+    private static final int[] STANDBY_HIT_POINTS_BOUNDS = {5, 31};
+    private static final int[] STANDBY_ATTACK_POINTS_BOUNDS = {0, 31};
     private static final int ATTACK_FACTOR = 3;
-    private static final int[] NEXT_TURN_HIT_ADD = {0,5};
-    private static final int[] NEXT_TURN_ENERGY_ADD = {0,5};
+    private static final int[] NEXT_TURN_HIT_ADD = {0, 5};
+    private static final int[] NEXT_TURN_ENERGY_ADD = {0, 5};
+
+    //Time complexity is O(n).
     public Battle(Pokemon[] players) {
         this.players = new Pokemon[players.length];
         System.out.println("****** Battle ******");
-        for (int i=0; i< players.length; i++) {
+        for (int i = 0; i < players.length; i++) {
             this.players[i] = players[i];
             System.out.println(PLAYER_NAME[i] + this.players[i].toString());
         }
     }
 
+    //Time complexity is O(n^2).
     public boolean oneLoop() {
         for (int i = 0; i < 2; i++) {
             int stepMode;
-            players[i].nextTurn( NEXT_TURN_HIT_ADD, NEXT_TURN_ENERGY_ADD);
+            players[i].nextTurn(NEXT_TURN_HIT_ADD, NEXT_TURN_ENERGY_ADD);
             do {
                 printStatus("=== Status before new step ===");
                 System.out.println("Now active " + getPlayerTitle(ACTIVE_INDEX[i]) + ".\n" +
@@ -36,9 +39,9 @@ public class Battle {
                     if (stepMode < 0)
                         System.out.println("Invalid step mode. Try again");
                 } while (stepMode < 0);
-            } while (!isOneStep(ACTIVE_INDEX[i] , PASSIVE_INDEX[i] , stepMode));
-            boolean loserFound = searchForLoser(ACTIVE_INDEX[i] , PASSIVE_INDEX[i]);
-            if (loserFound)  {
+            } while (!isOneStep(ACTIVE_INDEX[i], PASSIVE_INDEX[i], stepMode));
+            boolean loserFound = searchForLoser(ACTIVE_INDEX[i], PASSIVE_INDEX[i]);
+            if (loserFound) {
                 printStatus("*** Game over ***");
                 return false;
             }
@@ -47,7 +50,7 @@ public class Battle {
         return true;
     }
 
-
+    //Time complexity is O(n).
     private void printStatus(String title) {
         System.out.println(title);
         for (int j = 0; j < 2; j++) {
@@ -61,8 +64,9 @@ public class Battle {
         System.out.println("---------------");
     }
 
-    private boolean searchForLoser(int i1 ,  int i2)  {
-        int[] y = {i1,i2};
+    //Time complexity is O(n).
+    private boolean searchForLoser(int i1, int i2) {
+        int[] y = {i1, i2};
         boolean result = false;
         for (int i = 0; i < 2; i++) {
             int hit = players[y[i]].getHitPoints();
@@ -73,9 +77,11 @@ public class Battle {
         }
         return result;
     }
-    private boolean isOneStep(int i1 , int i2 , int stepMode) {
+
+    //Time complexity is O(1)(no loops).
+    private boolean isOneStep(int i1, int i2, int stepMode) {
         switch (stepMode) {
-            case  1 -> {
+            case 1 -> {
                 if (attackStep(i1, i2))
                     return true;
                 System.out.println("Mission failed");
@@ -89,22 +95,26 @@ public class Battle {
                 return evaluationStep(i1);
             }
             case 4 -> {
-                return specialActionStep(i1 , i2);
+                return specialActionStep(i1, i2);
             }
-            default -> {return true;}
+            default -> {
+                return true;
+            }
         }
     }
 
-    protected boolean specialActionStep(int i1 , int i2) {
+    //Time complexity is O(1)(no loops).
+    protected boolean specialActionStep(int i1, int i2) {
         boolean needNextAction = players[i1].specialAction();
-        System.out.println( getPlayerTitle(i1) + ".");
-        if (needNextAction)  {
+        System.out.println(getPlayerTitle(i1) + ".");
+        if (needNextAction) {
             int points = players[i1].getSpecialEnemyDamage();
             players[i2].setSelfHitDamage(points);
         }
         return players[i1].isActionSuccess();
     }
 
+    //Time complexity is O(1)(no loops).
     private boolean evaluationStep(int iActive) {
         boolean isEvaluation = players[iActive].evaluationPokemon();
         String string = getPlayerTitle(iActive);
@@ -114,19 +124,21 @@ public class Battle {
             System.out.println(string + " evaluation impossible ");
         return isEvaluation;
     }
+
+    //Time complexity is O(1)(no loops).
     private void standbyStep(int iActive) {
         Random random = new Random();
         int stepOption = random.nextInt(0, STANDBY_TITLES.length);
         switch (stepOption) {
             case 0 -> {
-                int hit = random.nextInt(STANDBY_HIT_POINTS_BOUNDS[0] , STANDBY_HIT_POINTS_BOUNDS[1]);
+                int hit = random.nextInt(STANDBY_HIT_POINTS_BOUNDS[0], STANDBY_HIT_POINTS_BOUNDS[1]);
                 players[iActive].setAddHitPoints(hit);
                 System.out.println(hit + STANDBY_TITLES[0] + PLAYER_NAME[iActive] + ".");
             }
             case 1 -> {
-                int attackPoints = random.nextInt(STANDBY_ATTACK_POINTS_BOUNDS[0] , STANDBY_ATTACK_POINTS_BOUNDS[1]);
+                int attackPoints = random.nextInt(STANDBY_ATTACK_POINTS_BOUNDS[0], STANDBY_ATTACK_POINTS_BOUNDS[1]);
                 players[iActive].setAddAttackPoints(attackPoints);
-                System.out.println(attackPoints + STANDBY_TITLES[1] +  PLAYER_NAME[iActive] + ".");
+                System.out.println(attackPoints + STANDBY_TITLES[1] + PLAYER_NAME[iActive] + ".");
             }
             case 2 -> {
                 players[iActive].setAttackFactor(ATTACK_FACTOR);
@@ -135,7 +147,8 @@ public class Battle {
         }
     }
 
-    private boolean attackStep(int i1 , int i2 ) {
+    //Time complexity is O(n).
+    private boolean attackStep(int i1, int i2) {
         Attack[] attacks = players[i1].getAttacks();
         System.out.println("Attack power factor: " + players[i1].getAttackFactor() + ". Choose attack number from possible attacks list:");
         int i;
@@ -168,6 +181,8 @@ public class Battle {
         System.out.println("Attacked " + players[i2].getName() + " hit damage " + enemyDamage);
         return true;
     }
+
+    //Time complexity is O(1)(no loops).
     private int checkDigAnswer(int minA, int maxA) {
         Scanner scanner = new Scanner(System.in);
         boolean isInt = scanner.hasNextInt();
@@ -181,9 +196,11 @@ public class Battle {
             answer = -1;
         return answer;
     }
+
+    //Time complexity is O(1)(no loops).
     private String getPlayerTitle(int playerIndex) {
         return PLAYER_NAME[ACTIVE_INDEX[playerIndex]] + players[ACTIVE_INDEX[playerIndex]].getTypeName() +
-                " - "  +  players[playerIndex].getName();
+                " - " + players[playerIndex].getName();
     }
 
 }
